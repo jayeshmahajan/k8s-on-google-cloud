@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configmap-reloader-app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: reloader-app
+    spec:
+      containers:
+        - name: app-container
+          image: app-image:latest
+          env:
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: LOG_LEVEL

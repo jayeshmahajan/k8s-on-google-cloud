@@ -1,0 +1,4 @@
+resource.type="k8s_container"
+jsonPayload.customer_ssn=*
+OR
+jsonPayload.credit_card_number=*

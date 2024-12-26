@@ -1,0 +1,15 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/my-project/my-app:$COMMIT_SHA", "."]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/my-project/my-app:$COMMIT_SHA"]
+images:
+  - "gcr.io/my-project/my-app:$COMMIT_SHA"
+
+---
+steps:
+  - name: "python:3.8"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - "pip install -r requirements.txt && pytest tests/"

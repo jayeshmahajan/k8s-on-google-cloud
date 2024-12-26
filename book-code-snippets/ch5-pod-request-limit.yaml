@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resource-limits-app
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: resource-limits-app
+    spec:
+      containers:
+        - name: app-container
+          image: app-image:latest
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1"

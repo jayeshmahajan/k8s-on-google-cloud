@@ -1,0 +1,13 @@
+logs:
+  configs:
+    - name: pod-logs
+      positions:
+        directory: /tmp/loki-positions
+      clients:
+        - url: http://loki:3100/loki/api/v1/push
+      scrape_configs:
+        - job_name: pod-logs
+          static_configs:
+            - targets: [localhost]
+              labels:
+                job: kubernetes-pods

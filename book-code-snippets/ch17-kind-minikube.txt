@@ -1,0 +1,75 @@
+# On MacOS/Linux
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.13.0/kind-$(uname)-amd64
+chmod +x ./kind
+mv ./kind /usr/local/bin/kind
+
+# On Windows
+curl -Lo kind.exe https://kind.sigs.k8s.io/dl/v0.13.0/kind-windows-amd64
+
+kind create cluster
+
+# kind-config.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+  - role: worker
+  - role: worker
+
+
+kind create cluster --config kind-config.yaml
+
+kubectl get nodes
+kubectl apply -f my-app.yaml
+
+kind delete cluster
+
+# On MacOS/Linux
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# On Windows
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-windows-amd64.exe
+
+minikube start
+
+minikube start --driver=docker
+
+kubectl get nodes
+kubectl apply -f my-app.yaml
+
+kubectl expose deployment my-app --type=LoadBalancer --port=80
+minikube service my-app
+
+# List all addons
+minikube addons list
+
+# Enable the metrics server
+minikube addons enable metrics-server
+
+minikube delete
+
+--
+# Create a Kind cluster
+kind create cluster
+
+# Run tests
+kubectl apply -f app-deployment.yaml
+kubectl wait --for=condition=available --timeout=60s deployment/my-app
+kubectl run test --image=my-test-image --wait --restart=Never
+
+# Delete the cluster after tests
+kind delete cluster
+
+
+# Start Minikube
+minikube start
+
+# Deploy the application
+kubectl apply -f app-deployment.yaml
+kubectl expose deployment my-app --type=LoadBalancer --port=8080
+
+# Access the service URL
+minikube service my-app --url
+
+

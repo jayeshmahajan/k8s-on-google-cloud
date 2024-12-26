@@ -1,0 +1,8 @@
+<filter kubernetes.**>
+  @type record_transformer
+  <record>
+    message ${record["message"].gsub(/\b\d{3}-\d{2}-\d{4}\b/, "***-**-****")}  # Redact SSN
+    message ${record["message"].gsub(/\b(\d{4})\d{8,12}(\d{4})\b/, '\1********\2')}  # Mask credit card numbers
+    message ${record["message"].gsub(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/, '[REDACTED]')}  # Redact email addresses
+  </record>
+</filter>

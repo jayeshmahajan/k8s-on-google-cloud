@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  annotations:
+    cloud.google.com/load-balancer-type: "External" # Specifies an external load balancer
+    cloud.google.com/managed-certificates: "my-managed-cert" # Links the managed SSL certificate
+    cloud.google.com/backend-config: '{"ports": {"443":"backendconfig-name"}}' # Optional: Links BackendConfig for additional control
+    cloud.google.com/neg: '{"exposed_ports": {"443":{}}}' # Enables Network Endpoint Groups (NEG) for pod-specific health checks
+spec:
+  selector:
+    app: my-app # Selects the pods to route traffic to
+  ports:
+    - protocol: TCP
+      port: 443 # External port for HTTPS
+      targetPort: 8080 # Port on the Pods receiving traffic
+  type: LoadBalancer
+  sessionAffinity: ClientIP # Enables session affinity to maintain session consistency
+  loadBalancerSourceRanges: # Restricts access to specific IP ranges
+    - "203.0.113.0/24" # Example: allow traffic only from trusted IP ranges

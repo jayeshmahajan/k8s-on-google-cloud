@@ -1,0 +1,10 @@
+kubectl get k8srequiredlimits.constraints.gatekeeper.sh --all-namespaces
+
+package k8spreventplaintextsecrets
+
+violation[{"msg": msg}] {
+  input.review.object.kind == "Secret"
+  input.review.object.data[_]
+  msg := "Plaintext secrets are not allowed in Kubernetes"
+}
+

@@ -1,0 +1,19 @@
+gcloud compute instances create k3s-master \
+  --zone=us-central1-a \
+  --machine-type=e2-small \
+  --image-family=ubuntu-2004-lts \
+  --image-project=ubuntu-os-cloud
+
+gcloud compute firewall-rules create k3s-api-access \
+  --allow tcp:6443 \
+  --source-ranges=0.0.0.0/0 \
+  --target-tags=k3s
+
+curl -sfL https://get.k3s.io | sh -
+
+cat /var/lib/rancher/k3s/server/node-token
+
+curl -sfL https://get.k3s.io | K3S_URL=https://<MASTER_NODE_IP>:6443 K3S_TOKEN=<NODE_TOKEN> sh -
+
+gcsfuse <BUCKET_NAME> <MOUNT_POINT>
+

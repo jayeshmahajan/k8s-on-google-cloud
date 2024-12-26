@@ -1,0 +1,14 @@
+gcloud container clusters update my-cluster --enable-autoscaling --min-nodes=1 --max-nodes=10
+
+gcloud container node-pools create memory-intensive-pool \
+  --cluster=my-cluster \
+  --machine-type=n1-highmem-8 \
+  --num-nodes=3
+
+kubectl top pods --namespace=my-namespace
+
+#Example of creating a preemptible node pool:
+gcloud container node-pools create preemptible-pool \
+  --cluster=my-cluster \
+  --preemptible \
+  --num-nodes=3

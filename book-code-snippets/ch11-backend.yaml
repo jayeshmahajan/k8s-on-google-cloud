@@ -1,0 +1,14 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: backendconfig-name
+spec:
+  healthCheck:
+    checkIntervalSec: 10
+    timeoutSec: 5
+    healthyThreshold: 3
+    unhealthyThreshold: 5
+    type: HTTPS # HTTPS health check for secure monitoring
+  timeoutSec: 30
+  connectionDraining:
+    drainingTimeoutSec: 60 # Graceful shutdown to prevent disruptions

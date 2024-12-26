@@ -1,0 +1,94 @@
+brew install helm
+
+# On Linux
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+helm create my-app
+
+# Install a chart from a repository (e.g., stable repo)
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install my-release bitnami/nginx
+
+# Install a local chart
+helm install my-release ./my-app
+
+# my-values.yaml
+replicaCount: 3
+image:
+  repository: nginx
+  tag: "1.19.6"
+
+helm install my-release ./my-app -f my-values.yaml
+
+helm install my-release ./my-app --set replicaCount=3,image.tag="1.19.6"
+
+# Base Configuration (my-app/base/kustomization.yaml)
+resources:
+  - deployment.yaml
+  - service.yaml
+
+commonLabels:
+  app: my-app
+
+# Base deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app-container
+        image: my-app:latest
+
+# Overlay for Dev Environment (my-app/overlays/dev/kustomization.yaml)
+resources:
+  - ../../base
+
+patchesStrategicMerge:
+  - patch-replicas.yaml
+
+# Patch for Dev Environment (my-app/overlays/dev/patch-replicas.yaml)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 2  # Override replicas for dev environment
+
+# Overlay for Prod Environment (my-app/overlays/prod/kustomization.yaml)
+resources:
+  - ../../base
+
+patchesStrategicMerge:
+  - patch-replicas.yaml
+commonLabels:
+  environment: production
+
+# Patch for Prod Environment (my-app/overlays/prod/patch-replicas.yaml)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 5  # Override replicas for prod environment
+
+
+# Apply the dev environment
+kubectl apply -k overlays/dev
+
+# Apply the prod environment
+kubectl apply -k overlays/prod
+
+

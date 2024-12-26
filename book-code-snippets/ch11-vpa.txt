@@ -1,0 +1,11 @@
+gcloud container clusters update my-cluster \
+    --enable-autoscaling \
+    --min-nodes 3 \
+    --max-nodes 10 \
+    --zone us-central1-a
+
+gcloud container clusters create my-cluster \
+    --zone us-central1-a \
+    --node-locations us-central1-a,us-central1-b,us-central1-c
+
+

@@ -1,0 +1,14 @@
+processors:
+  attributes:
+    actions:
+      - key: "user.email"
+        action: "delete"
+      - key: "user.ssn"
+        action: "delete"
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [attributes]
+      exporters: [googlecloud]

@@ -1,0 +1,60 @@
+# On macOS
+brew install kubectx
+
+# On Linux
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+
+gke_<project-id>_<zone>_<cluster-name>
+
+kubectx
+
+gke_my-project_us-central1-a_dev-cluster
+gke_my-project_us-central1-a_staging-cluster
+gke_my-project_us-central1-a_prod-cluster
+
+kubectx gke_my-project_us-central1-a_staging-cluster
+
+kubectx dev=gke_my-project_us-central1-a_dev-cluster
+kubectx staging=gke_my-project_us-central1-a_staging-cluster
+kubectx prod=gke_my-project_us-central1-a_prod-cluster
+
+kubectx dev
+kubectx prod
+
+kubens
+## output
+#default
+#kube-system
+#staging
+#production
+
+kubens production
+
+# Switch to the staging GKE cluster
+kubectx staging
+
+# Set namespace to 'frontend' within staging
+kubens frontend
+
+# Now any kubectl commands will apply to the staging cluster in the frontend namespace
+kubectl get pods
+
+# script
+
+#!/bin/bash
+
+# Define clusters and namespaces
+clusters=("dev" "staging" "prod")
+namespaces=("frontend" "backend")
+
+# Apply config to each cluster and namespace
+for cluster in "${clusters[@]}"; do
+  kubectx $cluster
+  for namespace in "${namespaces[@]}"; do
+    kubens $namespace
+    kubectl apply -f config.yaml
+  done
+done
+

@@ -1,0 +1,6 @@
+condition:
+  threshold:
+    filter: 'metric.type="kubernetes.io/node/cpu/usage_time" AND resource.type="k8s_node"'
+    comparison: "COMPARISON_GT"
+    thresholdValue: 80
+    duration: "300s"

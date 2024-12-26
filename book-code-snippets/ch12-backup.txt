@@ -1,0 +1,9 @@
+velero create backup my-backup \
+    --include-namespaces my-namespace \
+    --snapshot-volumes
+
+
+gcloud container clusters create my-cluster \
+    --zone us-central1-a \
+    --node-locations us-central1-a,us-central1-b,us-central1-c
+

@@ -1,0 +1,10 @@
+gcloud services enable anthos.googleapis.com
+
+gcloud container hub memberships register <cluster-name> \
+  --gke-cluster=<zone>/<cluster-name> \
+  --project=<project-id>
+
+kubectl apply -f config-management.yaml
+
+gcloud mesh install --project=<project-id> --managed
+

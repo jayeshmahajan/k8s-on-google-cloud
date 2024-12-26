@@ -1,0 +1,12 @@
+apiVersion: clouddeploy.googleapis.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: my-pipeline
+spec:
+  stages:
+    - name: dev
+      targetId: dev-target
+    - name: staging
+      targetId: staging-target
+    - name: prod
+      targetId: prod-target
