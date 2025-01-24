@@ -1,3 +1,32 @@
+# modules/gke_cluster/main.tf
+variable "project_id" {
+  description = "The ID of the project in which to create the cluster."
+  type        = string
+}
+
+variable "region" {
+  description = "The region where the cluster will be deployed."
+  type        = string
+}
+
+variable "cluster_name" {
+  description = "The name of the GKE cluster."
+  type        = string
+}
+
+variable "node_count" {
+  description = "The number of nodes in the default node pool."
+  type        = number
+  default     = 3
+}
+
+variable "machine_type" {
+  description = "The machine type to use for nodes."
+  type        = string
+  default     = "e2-medium"
+}
+############## Important ##############
+
 # Fetch quotas for the project in the specified region
 data "google_project_quotas" "region_quotas" {
   project = var.project_id
